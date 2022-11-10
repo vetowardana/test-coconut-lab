@@ -7,6 +7,10 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <!-- DataTables -->
+    <link rel="stylesheet" href="{{asset('vendor/datatables/css/dataTables.bootstrap4.min.css')}}">
+    <link rel="stylesheet" href="{{asset('vendor/datatables-plugins/responsive/css/responsive.bootstrap4.min.css')}}">
+    <link rel="stylesheet" href="{{asset('vendor/datatables-plugins/buttons/css/buttons.bootstrap4.min.css')}}">
 
     <title>Coconut Lab Test</title>
   </head>
@@ -37,37 +41,78 @@
 
     <main class="py-2">
       <div class="container">
-        <h3 class="card-title">Users Table</h3>
-        <table class="table">
-          <thead class="thead-dark">
-            <tr>
-              <th scope="col">No.</th>
-              <th scope="col">Name</th>
-              <th scope="col">Email</th>
-            </tr>
-          </thead>
-          <tbody>
-            @php $no = 1; @endphp
-            @forelse($user as $row)
-              <tr>
-                <td>{{ $no++ }}</td>
-                <td>{{ $row->name }}</td>
-                <td>{{ $row->email }}</td>
-              </tr>
-            @empty
-              <tr>
-                <td colspan="3" class="text-center">Belum ada data</td>
-              </tr>
-            @endforelse
-          </tbody>
-        </table>
+        <div class="card rounded">
+          <div class="card-header">
+            <h3 class="card-title">Users Table</h3>
+          </div>
+          <div class="card-body">
+            <table id="table" class="table table-bordered table-hover">
+              <thead class="thead-dark">
+                <tr>
+                  <th scope="col">No.</th>
+                  <th scope="col">Name</th>
+                  <th scope="col">Email</th>
+                </tr>
+              </thead>
+              <tbody>
+                @php $no = 1; @endphp
+                @forelse($user as $row)
+                  <tr>
+                    <td>{{ $no++ }}</td>
+                    <td>{{ $row->name }}</td>
+                    <td>{{ $row->email }}</td>
+                  </tr>
+                @empty
+                  <tr>
+                    <td colspan="3" class="text-center">No record.</td>
+                  </tr>
+                @endforelse
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
     </main>
+
+    <footer>
+      <div class="bg-dark py-2 fixed-bottom">
+        <div class="container text-center">
+          <p class="text-muted mb-0 py-2">&copy; 2022 Veto Wardana | All risghts reserved.</p>
+        </div>
+      </div>
+    </footer>
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <!-- DataTables  & Plugins -->
+    <script src="{{asset('vendor/datatables/js/jquery.dataTables.min.js')}}"></script>
+    <script src="{{asset('vendor/datatables/js/dataTables.bootstrap4.min.js')}}"></script>
+    <script src="{{asset('vendor/datatables-plugins/responsive/js/dataTables.responsive.min.js')}}"></script>
+    <script src="{{asset('vendor/datatables-plugins/responsive/js/responsive.bootstrap4.min.js')}}"></script>
+    <script src="{{asset('vendor/datatables-plugins/buttons/js/dataTables.buttons.min.js')}}"></script>
+    <script src="{{asset('vendor/datatables-plugins/buttons/js/buttons.bootstrap4.min.js')}}"></script>
+    <script src="{{asset('vendor/datatables-plugins/jszip/jszip.min.js')}}"></script>
+    <script src="{{asset('vendor/datatables-plugins/pdfmake/pdfmake.min.js')}}"></script>
+    <script src="{{asset('vendor/datatables-plugins/pdfmake/vfs_fonts.js')}}"></script>
+    <script src="{{asset('vendor/datatables-plugins/buttons/js/buttons.html5.min.js')}}"></script>
+    <script src="{{asset('vendor/datatables-plugins/buttons/js/buttons.print.min.js')}}"></script>
+    <script src="{{asset('vendor/datatables-plugins/buttons/js/buttons.colVis.min.js')}}"></script>
+
+    <script>
+      $(function () {
+        $('#table').DataTable({
+          "paging": true,
+          "lengthChange": false,
+          "searching": true,
+          "ordering": true,
+          "info": true,
+          "autoWidth": false,
+          "responsive": true,
+        });
+      });
+    </script>
   </body>
 </html>

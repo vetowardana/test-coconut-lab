@@ -76,6 +76,8 @@ Route::group(['namespace' => 'App\http\Controllers'], function() {
         Route::resource('addresses', 'AddressController');
         Route::post('addresses/inisiate-default-address/{id}', 'AddressController@inisiateDefaultAddress')->name('inisiateDefaultAddress');
         Route::get('addresses/send-mail-before-delete/{id}', 'AddressController@sendMailBeforeDelete')->name('sendMailBeforeDelete');
+        Route::get('addresses/delete-approval-page/{id}', 'AddressController@deleteApprovalPage')->name('deleteApprovalPage');
+        Route::get('addresses/delete-approval/{id}', 'AddressController@deleteApproval')->name('deleteApproval');
 
         /*
         |---------------------------------------------------------------------------
@@ -95,4 +97,6 @@ Route::group(['namespace' => 'App\http\Controllers'], function() {
     // Route::resource('addresses', 'AddressController');
     // Route::post('addresses/inisiate-default-address/{id}', 'AddressController@inisiateDefaultAddress')->name('inisiateDefaultAddress');
     // Route::get('addresses/send-mail-before-delete/{id}', 'AddressController@sendMailBeforeDelete')->name('sendMailBeforeDelete');
+    // Route::get('addresses/delete-approval-page/{id}', 'AddressController@deleteApprovalPage')->name('deleteApprovalPage');
+    // Route::post('addresses/delete-approval/{id}', 'AddressController@deleteApproval')->name('deleteApproval');
 });

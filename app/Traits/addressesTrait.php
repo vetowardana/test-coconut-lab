@@ -10,10 +10,19 @@ use Carbon\Carbon;
 
 trait addressesTrait
 {
+    public function changeDeleteApproval($deleteApproval, $address)
+    {
+        $address->update([
+            'delete_approval' => $deleteApproval
+        ]);
+
+        return $address;
+    }
+
     public function sendMail($address)
     {
         $data = [
-            'url' => route('addresses.index', 'keyword=' . $address->addresses),
+            'url' => route('deleteApprovalPage', $address->id),
             'date' => Carbon::now()->format('F d, Y')
         ];
 

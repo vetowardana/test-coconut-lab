@@ -14,22 +14,20 @@ class AddressController extends Controller
 {
     use addressesTrait;
 
-    function __construct()
-    {
-        $this->middleware('permission:address-list|address-create|address-edit|address-delete|address-inisiate-default', ['only' => ['index']]);
-        $this->middleware('permission:address-create', ['only' => ['create','store']]);
-        $this->middleware('permission:address-edit', ['only' => ['edit','update']]);
-        $this->middleware('permission:address-delete', ['only' => ['destroy']]);
-        $this->middleware('permission:address-delete', ['only' => ['destroy']]);
-        $this->middleware('permission:address-inisiate-default', ['only' => ['inisiateDefaultAddress']]);
-        $this->middleware('permission:address-send-mail-before-delete', ['only' => ['sendMailBeforeDelete']]);
-    }
+    // function __construct()
+    // {
+    //     $this->middleware('permission:address-list|address-create|address-edit|address-delete|address-inisiate-default', ['only' => ['index']]);
+    //     $this->middleware('permission:address-create', ['only' => ['create','store']]);
+    //     $this->middleware('permission:address-delete', ['only' => ['destroy']]);
+    //     $this->middleware('permission:address-inisiate-default', ['only' => ['inisiateDefaultAddress']]);
+    //     $this->middleware('permission:address-send-mail-before-delete', ['only' => ['sendMailBeforeDelete']]);
+    //     $this->middleware('permission:address-delete-approval-page', ['only' => ['deleteApprovalPage']]);
+    //     $this->middleware('permission:address-delete-approval-page', ['only' => ['deleteApproval']]);
+    // }
 
     public function index(Request $request)
     {
-        $address = Address::when($request->keyword, function($query) use($request) {
-            return $query->where('addresses', $request->keyword);
-        })->get();
+        $address = Address::get();
 
         return view('addresses.index', compact('address'));
     }
@@ -73,15 +71,35 @@ class AddressController extends Controller
         ]);
     }
 
-    public function sendMailBeforeDelete($id)
+    public function sendMailBeforeDelete(Request $request, $id)
     {
         $address = $this->findAddressWithId($id);
-        $address = $this->sendMail($address);
+        $email = $this->sendMail($address);
+        $data = $this->changeDeleteApproval($request->deleteApproval, $address);
 
         return response()->json([
             'code' => '00',
-            'data' => $address,
+            'data' => $data,
             'message' => 'Delete request has been sent.'
+        ]);
+    }
+
+    public function deleteApprovalPage($id)
+    {
+        $address = $this->findAddressWithId($id);
+
+        return view('addresses.approval-page', compact('address'));
+    }
+
+    public function deleteApproval(Request $request, $id)
+    {
+        $address = $this->findAddressWithId($id);
+        $data = $this->changeDeleteApproval($request->deleteApproval, $address);
+
+        return response()->json([
+            'code' => '00',
+            'data' => $data,
+            'message' => 'Delete request has been approved.'
         ]);
     }
 

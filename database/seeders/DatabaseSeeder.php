@@ -36,5 +36,9 @@ class DatabaseSeeder extends Seeder
         $this->call([
             VisitorRoleSeeder::class,
         ]);
+
+        $this->call([
+            AddingPermission::class,
+        ]);
     }
 }

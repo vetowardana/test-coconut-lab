@@ -90,13 +90,19 @@
                 @role('Super Admin')
                   <a href="javascript:void(0)" class="btn btn-danger btn-sm delete" data-id="{{ $row->id }}">delete</a>
                 @else
-                  <a href="javascript:void(0)" class="btn btn-danger btn-sm sendMailBeforeDelete" id="sendMailBeforeDelete{{$sendMailBeforeDelete++}}" data-number={{$sendMailBeforeDeleteNumber++}} data-id="{{ $row->id }}">Send delete request</a>
+                  @if($row->delete_approval == 'no')
+                    <a href="javascript:void(0)" class="btn btn-danger btn-sm sendMailBeforeDelete"  data-xyz="deleteApproval=wait" id="sendMailBeforeDelete{{$sendMailBeforeDelete++}}" data-number={{$sendMailBeforeDeleteNumber++}} data-id="{{ $row->id }}">Send delete request</a>
+                  @elseif($row->delete_approval == 'wait')
+                   <p class="text-secondary">Please wait the approval...</p>
+                  @else
+                    <a href="javascript:void(0)" class="btn btn-danger btn-sm delete" data-id="{{ $row->id }}">delete</a>
+                  @endif
                 @endrole
               </td>
             </tr>
           @empty
             <tr>
-              <td colspan="4" class="text-center">Belum ada data</td>
+              <td colspan="4" class="text-center">No record.</td>
             </tr>
           @endforelse
         </tbody>
@@ -113,15 +119,6 @@
         "responsive": true, "lengthChange": false, "autoWidth": false,
         "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
       }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-      $('#example2').DataTable({
-        "paging": true,
-        "lengthChange": false,
-        "searching": false,
-        "ordering": true,
-        "info": true,
-        "autoWidth": false,
-        "responsive": true,
-      });
     });
 
     $(document).ready(function() {
@@ -232,9 +229,10 @@
 
       // Send delete request
       $('body').on('click', '.sendMailBeforeDelete', function () {
-        if (confirm("Delete Address?") == true) {
+        if (confirm("Send delete request?") == true) {
           var id = $(this).data('id');
           var number = $(this).data('number');
+          var xyz = $(this).data('xyz');
           let url = "{{ route('sendMailBeforeDelete', ':id') }}";
           url = url.replace(":id", id);
           $("#sendMailBeforeDelete" + number).html('Please Wait...');
@@ -244,12 +242,10 @@
           $.ajax({
             type:"get",
             url: url,
-            data: "",
+            data: xyz,
             dataType: 'json',
             success: function(res){
-              $("#sendMailBeforeDelete" + number).html('Send delete request');
-              $("#sendMailBeforeDelete" + number).attr("disabled", false);
-              alert(res.message);
+              window.location.reload();
             }
           });
         }
