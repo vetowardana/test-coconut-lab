@@ -94,9 +94,9 @@ Route::group(['namespace' => 'App\http\Controllers'], function() {
     |---------------------------------------------------------------------------
     | Here is where you can find the public route. Anyone can access this route!
     */
-    Route::resource('addresses', 'AddressController');
-    Route::post('addresses/inisiate-default-address/{id}', 'AddressController@inisiateDefaultAddress')->name('inisiateDefaultAddress');
-    Route::get('addresses/send-mail-before-delete/{id}', 'AddressController@sendMailBeforeDelete')->name('sendMailBeforeDelete');
-    Route::get('addresses/delete-approval-page/{id}', 'AddressController@deleteApprovalPage')->name('deleteApprovalPage');
-    Route::post('addresses/delete-approval/{id}', 'AddressController@deleteApproval')->name('deleteApproval');
+    // Route::resource('addresses', 'AddressController');
+    // Route::post('addresses/inisiate-default-address/{id}', 'AddressController@inisiateDefaultAddress')->name('inisiateDefaultAddress');
+    // Route::get('addresses/send-mail-before-delete/{id}', 'AddressController@sendMailBeforeDelete')->name('sendMailBeforeDelete');
+    // Route::get('addresses/delete-approval-page/{id}', 'AddressController@deleteApprovalPage')->name('deleteApprovalPage');
+    // Route::post('addresses/delete-approval/{id}', 'AddressController@deleteApproval')->name('deleteApproval');
 });
