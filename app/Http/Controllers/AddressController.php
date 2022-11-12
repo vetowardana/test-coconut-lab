@@ -14,16 +14,16 @@ class AddressController extends Controller
 {
     use addressesTrait;
 
-    // function __construct()
-    // {
-    //     $this->middleware('permission:address-list|address-create|address-edit|address-delete|address-inisiate-default', ['only' => ['index']]);
-    //     $this->middleware('permission:address-create', ['only' => ['create','store']]);
-    //     $this->middleware('permission:address-delete', ['only' => ['destroy']]);
-    //     $this->middleware('permission:address-inisiate-default', ['only' => ['inisiateDefaultAddress']]);
-    //     $this->middleware('permission:address-send-mail-before-delete', ['only' => ['sendMailBeforeDelete']]);
-    //     $this->middleware('permission:address-delete-approval-page', ['only' => ['deleteApprovalPage']]);
-    //     $this->middleware('permission:address-delete-approval-page', ['only' => ['deleteApproval']]);
-    // }
+    function __construct()
+    {
+        $this->middleware('permission:address-list|address-create|address-edit|address-delete|address-inisiate-default', ['only' => ['index']]);
+        $this->middleware('permission:address-create', ['only' => ['create','store']]);
+        $this->middleware('permission:address-delete', ['only' => ['destroy']]);
+        $this->middleware('permission:address-inisiate-default', ['only' => ['inisiateDefaultAddress']]);
+        $this->middleware('permission:address-send-mail-before-delete', ['only' => ['sendMailBeforeDelete']]);
+        $this->middleware('permission:address-delete-approval-page', ['only' => ['deleteApprovalPage']]);
+        $this->middleware('permission:address-delete-approval-page', ['only' => ['deleteApproval']]);
+    }
 
     public function index(Request $request)
     {
@@ -39,6 +39,15 @@ class AddressController extends Controller
         ]);
 
         $validated = $request->validated();
+
+        $collectedDefault = collect($request->default)->map(function($item, $key) {return ['default' => $item]; })->where('default', 1)->count();
+
+        if ($collectedDefault > 1) {
+            return response()->json([
+                'code' => '02',
+                'message' => 'Default address cannot be more than 1.'
+            ]);
+        }
 
         $data = $this->mappingAddressData($request);
 

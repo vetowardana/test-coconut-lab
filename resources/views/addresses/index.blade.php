@@ -179,9 +179,13 @@
           processData: false,
           dataType: 'json',
           success: function(res){
-            $("#save").html('Save');
-            $("#save"). attr("disabled", false);
-            window.location.reload();
+            if (res.code == '00') {
+              $("#save").html('Save');
+              $("#save"). attr("disabled", false);
+              window.location.reload();
+            } else if (res.code == '02') {
+              alert(res.message);
+            }
           }
         });
       });
